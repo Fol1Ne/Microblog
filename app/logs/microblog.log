@@ -1,0 +1,37 @@
+2023-10-25 22:39:02,471 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 22:39:02,480 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 22:39:34,454 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 22:39:34,463 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 22:40:57,376 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 22:40:57,386 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 22:40:58,833 ERROR: Exception on / [GET] [in D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask\app.py", line 1948, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask\app.py", line 2242, in preprocess_request
+    rv = func()
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\app\main\routes.py", line 15, in before_request
+    if current_user.is_authenticated:
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\werkzeug\local.py", line 347, in __getattr__
+    return getattr(self._get_current_object(), name)
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\werkzeug\local.py", line 306, in _get_current_object
+    return self.__local()
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask_login\utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask_login\utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "D:\Programming Projects\Python\pythonQuestions\Microblog\venv\lib\site-packages\flask_login\login_manager.py", line 303, in _load_user
+    "Missing user_loader or request_loader. Refer to "
+Exception: Missing user_loader or request_loader. Refer to http://flask-login.readthedocs.io/#how-it-works for more info.
+2023-10-25 22:47:02,889 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 22:47:02,900 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 23:01:49,592 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]
+2023-10-25 23:01:49,601 INFO: Microblog startup [in D:\Programming Projects\Python\pythonQuestions\Microblog\app\__init__.py:78]

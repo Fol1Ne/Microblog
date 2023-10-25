@@ -1,0 +1,147 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    {% if title %}{{ title }} - Microblog{% else %}Welcome to Microblog{% endif %}
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link href="/static/styles/style.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.lang(g.locale) }}
+
+    <script>
+        function translate(sourceElem, destElem, sourceLang, destLang) {
+            $(destElem).html('<img width="50px" src="{{ url_for('static', filename='loading.gif') }}">');
+            $.post('/translate', {
+                text: $(sourceElem).text(),
+                source_language: sourceLang,
+                dest_language: destLang
+            }).done(function(response) {
+                $(destElem).text(response['text'])
+            }).fail(function() {
+                $(destElem).text("{{ _('Error: Could not contain server.') }}");
+            });
+        }
+
+        $(function() {
+            var timer = null
+            var xhr = null
+            $(".user_popup").hover(
+                function(event){
+                    var elem = $(event.currentTarget);
+                    timer = setTimeout(function() {
+                        timer = null;
+                        xhr = $.ajax(
+                            "/user/" + elem.first().text().trim() + "/popup").done(
+                                function(data) {
+                                    xhr = null;
+                                    elem.popover({
+                                        trigger: "manual",
+                                        html: true,
+                                        animation: false,
+                                        container: elem,
+                                        content: data
+                                    }).popover("show");
+                                    flask_moment_render_all();
+                                }
+                            );
+                    }, 1000);
+                },
+                function(event){
+                    var elem = $(event.currentTarget);
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                    else if (xhr) {
+                        xhr.abort();
+                        xhr = null;
+                    }
+                    else {
+                        elem.popover("destroy");
+                    }
+                }
+            )
+        });
+
+        function set_messsage_count(n) {
+            $("#message_count").text(n);
+            $("#message_count").css("visibility", n ? "visible" : "hidden");
+        }
+
+        {% if current_user.is_authenticated %}
+            $(function() {
+                var since = 0;
+                setInterval(function() {
+                    $.ajax("{{ url_for('main.notifications') }}?since=" + since).done(
+                        function(notifications) {
+                            for (var i = 0; i , notifications.length; i++) {
+                                if (notifications[i].name == "unread_message_count")
+                                    sent_message_count(notifications[i].data);
+                                since = notifications[i].timestamp
+                            }
+                        }
+                    );
+                }, 10000);
+            });
+        {% endif %}
+    </script>
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default">
+        <div class="nav_menu">
+            <ul class="nav nav-tabs">
+                <li><a href="/">{{ _("Home") }}</a></li>
+                <li><a href="{{ url_for('main.explore') }}">{{ _("Explore") }}</a></li>
+                {% if current_user.is_anonymous %}
+                    <li><a href="/login">{{ _("Login") }}</a></li>
+                    <li><a href="/register">{{ _("Registration") }}</a></li>
+                {% else %}
+                    <li>
+                        <a href="{{ url_for('main.messages') }}">
+                            {{ _("Messages") }}
+                            {% set new_messages = current_user.new_messages() %}
+                            {% if new_messages %}
+                                <span id="message_count" class="badge" style="visibility: {% if new_messages %}visible {% else %}hidden {% endif %};">
+                                    {{ new_messages }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.username }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _("Profile") }}</a></li>
+                            <li><a href="/logout">{{ _("Logout") }}</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            {% if g.search_form %}
+                                <form class="navbar-form navbar-left" method="get" action="{{ url_for('main.search') }}">
+                                    <div class="form-group">
+                                        {{ g.search_form.q(size=20, class="form-control", placeholder=g.search_form.q.label.text) }}
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% block app_content %}
+
+        {% endblock %}
+    </div>
+{% endblock %}
